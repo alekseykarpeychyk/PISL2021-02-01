@@ -3,7 +3,6 @@ package by.it.group873601.karpeychik.lesson06;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -45,17 +44,26 @@ public class B_LongDivComSubSeq {
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (m[i] % m[j] == 0 && array[j] + 1 > array[i]) {
-                    array[i] = array[j] + 1;
-                }
 
+        int[] len = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            len[i] = 1;
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (m[j] % m[i] == 0) {
+                    if (len[i] + 1 > len[j]) {
+                        len[j] = len[i] + 1;
+                        if (len[j] > result) {
+                            result = len[j];
+                        }
+                    }
+                }
             }
         }
-        result = Arrays.stream(array).max().getAsInt();
+
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

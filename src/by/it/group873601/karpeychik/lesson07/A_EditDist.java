@@ -42,57 +42,33 @@ public class A_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
         int result = 0;
 
-        int[][] distances = new int[one.length() + 1][two.length() + 1];
-        for (int i = 0; i < one.length() + 1; i++) {
-            for (int j = 0; j < two.length() + 1; j++) {
-                distances[i][j] = Integer.MAX_VALUE;
+        int i = one.length();
+        int j = two.length();
+
+        if (i == 0 && j == 0)
+            result = 0;
+        else if (i > 0 && j == 0)
+            result = i;
+        else if (i == 0 && j > 0)
+            result = j;
+        else {
+            int min = getDistanceEdinting(one, two.substring(0, j - 1)) + 1;
+            int b = getDistanceEdinting(one.substring(0, i - 1), two.substring(0, j - 1));
+            if (one.charAt(i - 1) != two.charAt(j - 1))
+                b += 1;
+            if (b < min)
+                min = b;
+            if (i > 0 && j > 0) {
+                int c = getDistanceEdinting(one.substring(0, i - 1), two) + 1;
+                if (c < min)
+                    min = c;
             }
+            result = min;
         }
-
-        for (int i = 0; i < one.length() + 1; i++) {
-            for (int j = 0; j < two.length() + 1; j++) {
-                result = editDistTD(i, j, distances, one, two);
-            }
-
-        }
-
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
-    }
-
-
-    int editDistTD(int i, int j, int[][] distances, String one, String two) {
-
-        if (distances[i][j] == Integer.MAX_VALUE) {
-            if (i == 0) {
-                distances[i][j] = j;
-            } else {
-                if (j == 0) {
-                    distances[i][j] = i;
-                } else {
-                    int insert = editDistTD(i, j - 1, distances, one, two) + 1;
-                    int delete = editDistTD(i - 1, j, distances, one, two) + 1;
-                    int replace = editDistTD(i - 1, j - 1, distances, one, two) + getDiff(one.charAt(i - 1), two.charAt(j - 1));
-
-                    distances[i][j] = getMin(insert, delete, replace);
-                }
-            }
-        }
-        return distances[i][j];
-    }
-
-    int getDiff(char one, char two) {
-        return one != two ? 1 : 0;
-    }
-
-    int getMin(int one, int two, int three) {
-        int min = -1;
-        min = Math.min(two, one);
-        min = Math.min(min, three);
-        return min;
     }
 
 
@@ -101,9 +77,9 @@ public class A_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         A_EditDist instance = new A_EditDist();
         Scanner scanner = new Scanner(stream);
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
     }
 }
 

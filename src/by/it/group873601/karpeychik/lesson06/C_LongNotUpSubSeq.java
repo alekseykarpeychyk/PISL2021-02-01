@@ -3,7 +3,6 @@ package by.it.group873601.karpeychik.lesson06;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -53,34 +52,44 @@ public class C_LongNotUpSubSeq {
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
 
-        int[] arrayD = new int[n];
-        int[] prev = new int[n];
+        int[] p = new int[n];
+        int[] ind = new int[n + 1];
+
+        int l = 0;
+
         for (int i = 0; i < n; i++) {
-            arrayD[i] = 1;
-            prev[i] = -1;
-            for (int j = 0; j < i; j++) {
-                if (m[i] <= m[j] && (arrayD[j] + 1) > arrayD[i]) {
-                    arrayD[i] = arrayD[j] + 1;
-                    prev[i] = j;
+            int lo = 1;
+            int hi = l;
+
+            while(lo <= hi) {
+                int mid = (int) Math.ceil((double) (lo + hi) / 2);
+                if (m[ind[mid]] >= m[i]) {
+                    lo = mid + 1;
+                } else {
+                    hi = mid - 1;
                 }
             }
-        }
-        result = Arrays.stream(arrayD).max().getAsInt();
 
-        //восстановление
-        int[] arrayIndexes = new int[result];
-        int k = 0;
-        for (int i = 1; i < n; i++)
-            if (arrayD[i] > arrayD[k]) {
-                k = i;
+            int nl = lo;
+
+            p[i] = ind[nl - 1];
+            ind[nl] = i;
+
+            if (nl > l) {
+                l = nl;
             }
-        int j = k - 1;
-        while (k >= 0) {
-            arrayIndexes[j] = k + 1;
-            j--;
-            k = prev[k];
         }
-        System.out.println(Arrays.toString(arrayIndexes));
+        result = l;
+
+        StringBuilder builder = new StringBuilder();
+        int k = ind[l];
+        for (int i = l - 1; i >= 0; i--) {
+            builder.append(" ").append(k + 1);
+            k = p[k];
+        }
+        builder.reverse();
+        System.out.println(builder.toString());
+
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

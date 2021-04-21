@@ -3,7 +3,6 @@ package by.it.group873601.karpeychik.lesson06;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -46,23 +45,30 @@ public class A_LIS {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = LISBottomUp(m);
+        int result = 0;
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
-    }
+        int[] len = new int[n];
 
-    int LISBottomUp(int[] array) {
-        int[] arrayD = new int[array.length];
-        for(int i = 0; i < array.length; i++) {
-            arrayD[i] = 1;
-            for(int j = 0; j < array.length - 1; j++) {
-                if(array[j] < array[i] && arrayD[j] + 1 > arrayD[i]) {
-                    arrayD[i] = arrayD[j] + 1;
+        for (int i = 0; i < n; i++) {
+            len[i] = 1;
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (m[j] > m[i]) {
+                    if (len[i] + 1 > len[j]) {
+                        len[j] = len[i] + 1;
+                        if (len[j] > result) {
+                            result = len[j];
+                        }
+                    }
                 }
             }
         }
-        return Arrays.stream(arrayD).max().getAsInt();
+
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        return result;
     }
 
 

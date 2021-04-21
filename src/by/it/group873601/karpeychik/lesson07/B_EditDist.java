@@ -43,41 +43,35 @@ public class B_EditDist {
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-        int[][] distances = new int[one.length() + 1][two.length() + 1];
 
-        for(int i = 0; i < one.length() + 1; i++){
-            distances[i][0] = i;
+
+        int result = 0;
+        int[][] d = new int[one.length() + 1][two.length() + 1];
+
+        d[0][0] = 0;
+        for (int j = 1; j <= two.length(); j++) {
+            d[0][j] = d[0][j - 1] + 1;
         }
-
-        for(int j = 0; j < two.length() + 1; j++){
-            distances[0][j] = j;
-        }
-
-        for(int i = 0; i < one.length(); i++){
-            for(int j = 0; j < two.length(); j++){
-                int cost = getDiff(one.charAt(i),two.charAt(j));
-                distances[i + 1][j + 1] = getMin(
-                        distances[i][j + 1] + 1,
-                        distances[i + 1][j] + 1,
-                        distances[i][j] + cost);
+        for (int i = 1; i <= one.length(); i++) {
+            d[i][0] = d[i - 1][0] + 1;
+            for (int j = 1; j <= two.length(); j++) {
+                int min = d[i - 1][j] + 1;
+                if (d[i][j - 1] + 1 < min)
+                    min = d[i][j - 1] + 1;
+                int c = d[i - 1][j - 1];
+                if (one.charAt(i - 1) != two.charAt(j - 1))
+                    c += 1;
+                if (c < min)
+                    min = c;
+                d[i][j] = min;
             }
         }
-
-        int result = distances[one.length()][two.length()];
+        result = d[one.length()][two.length()];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
 
-    int getDiff(char one, char two) {
-        return one != two ? 1 : 0;
-    }
 
-    int getMin(int one, int two, int three) {
-        int min = -1;
-        min = Math.min(two, one);
-        min = Math.min(min, three);
-        return min;
-    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

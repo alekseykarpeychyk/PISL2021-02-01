@@ -37,35 +37,20 @@ public class B_Knapsack {
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
-
         int result = 0;
-
-        int [][] destination = new int[w + 1][n + 1];
-        for(int i = 0; i < w + 1; i++){
-            destination[i] = new int[n + 1];
+        int[][] a = new int[n + 1][w + 1];
+        for (int i = 0; i <= w; i++) {
+            a[0][i] = 0;
         }
-
-        for(int i = 0; i < w; i++){
-            destination[i][0] = 0;
-        }
-        for(int j = 0; j < n; j++){
-            destination[0][j] = 0;
-        }
-
-        for(int i = 1; i < n + 1; i++){
-            for(int j = 1; j < w + 1; j++){
-                destination[j][i] = destination[j][i - 1];
-                if(gold[i - 1] <= j){
-                    /*int w = gold[i - 1];
-                    int c = gold[i - 1];
-                    int sum = destination[j - gold[i - 1]][i - 1] + gold[i - 1];*/
-                    destination[j][i] = Math.max(destination[j][i], destination[j - gold[i - 1]][i - 1] + gold[i - 1]);
-                }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= w; j++) {
+                a[i][j] = a[i - 1][j];
+                if (j > gold[i - 1] && (a[i - 1][j - gold[i - 1]] + gold[i - 1] > a[i][j]))
+                    a[i][j] = a[i - 1][j - gold[i - 1]] + gold[i - 1];
             }
         }
-        result = destination[w][n];
 
-
+        result = a[n][w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
